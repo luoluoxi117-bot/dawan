@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大弯中学丨城厢古镇 · 千年古城的诗意时光</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  
+  <!-- 字体引入 -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-primary: #5B7C8D;
+      --color-secondary: #A67C52;
+      --color-accent: #8B4513;
+      --color-bg: #F5F3ED;
+      --color-card: #FDFCF8;
+      --color-text: #2C3E50;
+      --color-text-light: #6B7280;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    /* 水彩背景效果 */
+    .watercolor-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(91, 124, 141, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(166, 124, 82, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(139, 69, 19, 0.08) 0%, transparent 50%);
+    }
+    
+    /* 导航栏 */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(253, 252, 248, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(91, 124, 141, 0.1);
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+    
+    nav.scrolled {
+      background: rgba(253, 252, 248, 0.98);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      letter-spacing: 2px;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    
+    .nav-link {
+      position: relative;
+      color: var(--color-text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      padding: 0.5rem 0;
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+    
+    .nav-link:hover {
+      color: var(--color-primary);
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* 英雄区域 */
+    .hero {
+      margin-top: 80px;
+      height: 85vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .hero-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      filter: brightness(0.9);
+    }
+    
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, 
+        rgba(245, 243, 237, 0.3) 0%, 
+        rgba(245, 243, 237, 0.6) 100%);
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .hero-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: var(--color-primary);
+      margin-bottom: 1.5rem;
+      letter-spacing: 8px;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+      color: var(--color-secondary);
+      font-weight: 500;
+      letter-spacing: 4px;
+      margin-bottom: 3rem;
+    }
+    
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--color-text-light);
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      line-height: 2;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 3rem;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+      color: white;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(91, 124, 141, 0.3);
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(91, 124, 141, 0.4);
+    }
+    
+    /* 内容区域 */
+    .content-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-align: center;
+      margin-bottom: 1rem;
+      letter-spacing: 4px;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: var(--color-text-light);
+      font-size: 1.1rem;
+      margin-bottom: 4rem;
+      letter-spacing: 2px;
+    }
+    
+    /* 历史时间轴 */
+    .timeline {
+      position: relative;
+      padding: 2rem 0;
+    }
+    
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, 
+        var(--color-primary) 0%, 
+        var(--color-secondary) 100%);
+      transform: translateX(-50%);
+    }
+    
+    .timeline-item {
+      display: flex;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    
+    .timeline-item:nth-child(odd) {
+      flex-direction: row;
+    }
+    
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+    }
+    
+    .timeline-content {
+      width: 45%;
+      background: var(--color-card);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      position: relative;
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 2rem;
+      width: 20px;
+      height: 20px;
+      background: var(--color-secondary);
+      border: 4px solid var(--color-bg);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+    
+    .timeline-year {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-text {
+      color: var(--color-text-light);
+      line-height: 1.8;
+    }
+    
+    /* 景点卡片 */
+    .attractions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    
+    .attraction-card {
+      background: var(--color-card);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      border: 1px solid rgba(91, 124, 141, 0.1);
+    }
+    
+    .attraction-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    }
+    
+    .attraction-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    
+    .attraction-card:hover .attraction-image {
+      transform: scale(1.05);
+    }
+    
+    .attraction-content {
+      padding: 2rem;
+    }
+    
+    .attraction-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    
+    .attraction-description {
+      color: var(--color-text-light);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    
+    .attraction-tag {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: linear-gradient(135deg, 
+        rgba(91, 124, 141, 0.1), 
+        rgba(166, 124, 82, 0.1));
+      color: var(--color-secondary);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    /* 文化特色 */
+    .culture-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    
+    .culture-item {
+      text-align: center;
+      padding: 2.5rem;
+      background: var(--color-card);
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(91, 124, 141, 0.1);
+    }
+    
+    .culture-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+    
+    .culture-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .culture-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      letter-spacing: 2px;
+    }
+    
+    .culture-text {
+      color: var(--color-text-light);
+      line-height: 1.8;
+    }
+    
+    /* 页脚 */
+    footer {
+      background: linear-gradient(135deg, 
+        rgba(91, 124, 141, 0.95), 
+        rgba(166, 124, 82, 0.95));
+      color: white;
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .footer-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: 3px;
+    }
+    
+    .footer-text {
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      line-height: 1.8;
+    }
+    
+    .footer-info {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .footer-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 2rem 0;
+    }
+    
+    .footer-copyright {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      html {
+        font-size: 14px;
+      }
+      
+      body {
+        padding: 0 1rem;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .hero-title {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+      }
+      
+      .timeline::before {
+        left: 20px;
+      }
+      
+      .timeline-item {
+        flex-direction: column !important;
+        padding-left: 50px;
+      }
+      
+      .timeline-content {
+        width: 100%;
+      }
+      
+      .timeline-dot {
+        left: 20px;
+      }
+      
+      .attractions-grid,
+      .culture-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .footer-info {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+    
+    /* 动画类 */
+    .fade-in {
+      opacity: 0;
+    }
+    
+    .slide-up {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  </style>
+</head>
+<body>
+  <div class="watercolor-bg"></div>
+
+<nav id="navbar">
+  <div class="nav-container">
+    <!-- Logo和标题 -->
+    <div class="flex items-center gap-2">
+      <img src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAELo4FpKWiuPdWO3hIbcxPsskrf8916KwACJx4AAkZlSVUKuoO4Ahd2AjYE.png" 
+           width="50" 
+           height="50" 
+           alt="城厢古镇Logo"
+           class="transition-transform duration-300 hover:scale-105">
+      <div class="nav-logo">城厢古镇</div>
+    </div>
+    
+    <!-- 桌面端导航链接 -->
+    <ul class="nav-links">
+      <li><a href="#home" class="nav-link">首页</a></li>
+      <li><a href="#history" class="nav-link">历史沿革</a></li>
+      <li><a href="#attractions" class="nav-link">景点览胜</a></li>
+      <li><a href="#culture" class="nav-link">文化特色</a></li>
+      <li><a href="#visit" class="nav-link">游览信息</a></li>
+    </ul>
+    
+    <!-- 移动端汉堡菜单按钮 -->
+    <button id="menu-toggle" class="md:hidden text-gray-700 focus:outline-none">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- 移动端导航菜单 -->
+  <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
+    <ul class="py-2 px-4">
+      <li><a href="#home" class="block py-2 px-4 hover:bg-gray-100 rounded-md">首页</a></li>
+      <li><a href="#history" class="block py-2 px-4 hover:bg-gray-100 rounded-md">历史沿革</a></li>
+      <li><a href="#attractions" class="block py-2 px-4 hover:bg-gray-100 rounded-md">景点览胜</a></li>
+      <li><a href="#culture" class="block py-2 px-4 hover:bg-gray-100 rounded-md">文化特色</a></li>
+      <li><a href="#visit" class="block py-2 px-4 hover:bg-gray-100 rounded-md">游览信息</a></li>
+    </ul>
+  </div>
+</nav>
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link">首页</a></li>
+        <li><a href="#history" class="nav-link">历史沿革</a></li>
+        <li><a href="#attractions" class="nav-link">景点览胜</a></li>
+        <li><a href="#culture" class="nav-link">文化特色</a></li>
+        <li><a href="#visit" class="nav-link">游览信息</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- 英雄区域 -->
+  <section id="home" class="hero">
+    <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/RK8ftdhn4pBectZouvZWRe.jpg" alt="城厢古镇全景" class="hero-image">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1 class="hero-title fade-in">城厢古镇</h1>
+      <p class="hero-subtitle fade-in">千年古城 · 诗意栖居</p>
+      <p class="hero-description fade-in">
+        两千余年历史沉淀，龟背格局传承千年<br>
+        青灰赭石，水墨丹青，在这里感受古蜀文明的脉动
+      </p>
+      <a href="#attractions" class="cta-button fade-in">探索古镇</a>
+    </div>
+  </section>
+  
+  <!-- 历史沿革 -->
+  <section id="history" class="content-section">
+    <h2 class="section-title slide-up">历史沿革</h2>
+    <p class="section-subtitle slide-up">穿越时空，聆听千年古城的故事</p>
+    
+    <div class="timeline">
+      <div class="timeline-item slide-up">
+        <div class="timeline-content">
+          <div class="timeline-year">商周至战国</div>
+          <p class="timeline-text">
+            城厢之地隶属古蜀国，是古蜀文明的重要组成部分。秦灭蜀后，辖地归入蜀郡，开启了两千余年的建制历史。
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      
+      <div class="timeline-item slide-up">
+        <div class="timeline-content">
+          <div class="timeline-year">汉晋时期</div>
+          <p class="timeline-text">
+            城厢曾作为新都故城，是成都平原三大名城之一的"新都城"所在地。2021年考古发现的"新都城"铭文包砖，为这段历史提供了实物证据。
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      
+      <div class="timeline-item slide-up">
+        <div class="timeline-content">
+          <div class="timeline-year">唐宋时期</div>
+          <p class="timeline-text">
+            唐咸亨二年（671年），金堂县治所迁至古城镇（今城厢镇）。宋嘉祐二年（1057年），城厢镇的县治格局逐渐形成，成为一方政治、经济、文化中心。
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      
+      <div class="timeline-item slide-up">
+        <div class="timeline-content">
+          <div class="timeline-year">明清民国</div>
+          <p class="timeline-text">
+            清中晚期至民国时期，城厢镇城建规模达到鼎盛。移民潮带来多元文化，建起多座会馆和祠堂，形成了独特的"龟背格局"——四条主街、三十二条巷子、六十四座人文院落。
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+      
+      <div class="timeline-item slide-up">
+        <div class="timeline-content">
+          <div class="timeline-year">当代传承</div>
+          <p class="timeline-text">
+            1950年金堂县政府迁址赵镇，1981年城厢镇划归青白江区。2021年被评为成都市乡村文化振兴样板镇，成为成都唯一传承千年县治格局的古城。
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 景点览胜 -->
+  <section id="attractions" class="content-section" style="background: rgba(91, 124, 141, 0.03);">
+    <h2 class="section-title slide-up">景点览胜</h2>
+    <p class="section-subtitle slide-up">探寻古镇的文化瑰宝</p>
+    
+    <div class="attractions-grid">
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/ysBxvExh7e7DE3b2CQhMKi.jpg" alt="城厢老街" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">西街古韵</h3>
+          <p class="attraction-description">
+            全长320米的西街是古镇最热闹的地方，保留着清代县衙遗址。主街两旁商铺林立，背后是老城厢人的家，充满浓郁的人间烟火气。
+          </p>
+          <span class="attraction-tag">历史街区</span>
+          <span class="attraction-tag">非遗美食</span>
+        </div>
+      </div>
+      
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/tbHm3Ry6DeV54U4Txurq2m.jpg" alt="古镇石桥" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">护城河与古桥</h3>
+          <p class="attraction-description">
+            护城河环绕古城，与茅家河、绣川河纵横交错，构成完整的水系。古城桥横跨其上，见证着千年岁月的流转。
+          </p>
+          <span class="attraction-tag">水系景观</span>
+          <span class="attraction-tag">摄影胜地</span>
+        </div>
+      </div>
+      
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/ubc4aE4uaygN49YfaDwGUc.jpg" alt="城厢城楼" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">文庙与武庙</h3>
+          <p class="attraction-description">
+            文庙供奉孔子，武庙祭祀关羽。有趣的是，城厢武庙高度超过文庙，这种现象在全国罕见，展现了城厢人对武的崇尚。
+          </p>
+          <span class="attraction-tag">省级文保</span>
+          <span class="attraction-tag">建筑艺术</span>
+        </div>
+      </div>
+      
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/qv9v4Sfg8Vb2MwQcvMyaGe.jpg" alt="川西民居" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">绣川书院</h3>
+          <p class="attraction-description">
+            四川省保存最完好的古代县一级最高学府，已有近280年历史。蜀中才子李调元、戊戌六君子刘光第等曾在此任教，见证了无数文人墨客的成长。
+          </p>
+          <span class="attraction-tag">古代学府</span>
+          <span class="attraction-tag">文化地标</span>
+        </div>
+      </div>
+      
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/L4nVLpsvSNyCA5rGgYKbDS.jpg" alt="古镇灯笼" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">陈氏宗祠</h3>
+          <p class="attraction-description">
+            建于清代，已有近280年历史，为湖广客家陈氏先祖入川时所建。占地约1800平方米，分东西两院，是保存完好的家族祠堂代表。
+          </p>
+          <span class="attraction-tag">宗祠文化</span>
+          <span class="attraction-tag">客家建筑</span>
+        </div>
+      </div>
+      
+      <div class="attraction-card slide-up">
+        <img src="https://musk-online.fbcontent.cn/pub-musk-ai-studio/workflow/file/picture/RK8ftdhn4pBectZouvZWRe.jpg" alt="古镇全景" class="attraction-image">
+        <div class="attraction-content">
+          <h3 class="attraction-title">彭家珍公园</h3>
+          <p class="attraction-description">
+            纪念辛亥革命先烈彭家珍的专祠和公园。彭家珍因炸死清王朝宗社党首领，促使清帝退位，孙中山、毛泽东都对其有极高评价。
+          </p>
+          <span class="attraction-tag">红色教育</span>
+          <span class="attraction-tag">爱国主义</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 文化特色 -->
+  <section id="culture" class="content-section">
+    <h2 class="section-title slide-up">文化特色</h2>
+    <p class="section-subtitle slide-up">感受古镇独特的文化魅力</p>
+    
+    <div class="culture-grid">
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🏛️</div>
+        <h3 class="culture-title">龟背格局</h3>
+        <p class="culture-text">
+          成都唯一传承千年县治格局的古城，四条主街形成两个"丁字形"，32条小巷构成功能各异的县城街坊，体现古代县城规范化建制。
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">📚</div>
+        <h3 class="culture-title">耕读文化</h3>
+        <p class="culture-text">
+          "耕可致富，读可荣身"的传统思想根深蒂固。绣川书院培养了众多文人墨客，传承着中华优秀传统文化。
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🎭</div>
+        <h3 class="culture-title">移民文化</h3>
+        <p class="culture-text">
+          清代移民潮带来五湖四海的外来人口和多元文化，建起福建会馆、湖广会馆、江西会馆等多座同乡会馆，形成独特的移民文化景观。
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🍜</div>
+        <h3 class="culture-title">美食文化</h3>
+        <p class="culture-text">
+          西街张麻鸭、郑记酸辣粉、绿豆酥、双麻酥等非遗美食，承载着老成都的味道记忆，让人在舌尖上感受古镇的烟火气息。
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🎨</div>
+        <h3 class="culture-title">民俗活动</h3>
+        <p class="culture-text">
+          每年的"城厢之春"民俗文化活动，打连箫等传统表演深受喜爱，成为城厢人共同的文化记忆，让古镇充满生机与活力。
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🏺</div>
+        <h3 class="culture-title">文物保护</h3>
+        <p class="culture-text">
+          现有不可移动文物74处，其中省级文保单位6处。2021年发现汉晋"新都城"西城墙遗址和明清重层壁画，文物保护成果显著。
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 游览信息 -->
+  <section id="visit" class="content-section" style="background: rgba(166, 124, 82, 0.03);">
+    <h2 class="section-title slide-up">游览信息</h2>
+    <p class="section-subtitle slide-up">开启您的城厢古镇之旅</p>
+    
+    <div class="culture-grid">
+      <div class="culture-item slide-up">
+        <div class="culture-icon">📍</div>
+        <h3 class="culture-title">地理位置</h3>
+        <p class="culture-text">
+          位于成都市青白江区城厢镇<br>
+          距成都市区约1小时车程<br>
+          交通便利，自驾或公共交通均可到达
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🎫</div>
+        <h3 class="culture-title">门票信息</h3>
+        <p class="culture-text">
+          古镇免费开放<br>
+          部分景点（文庙、武庙等）免费参观<br>
+          周边停车场免费（节假日期间）
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">🚗</div>
+        <h3 class="culture-title">交通方式</h3>
+        <p class="culture-text">
+          自驾：成金青快速通道直达<br>
+          高铁：成都东站→青白江东站→公交Q4<br>
+          建议游玩时间：4-5小时
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">⏰</div>
+        <h3 class="culture-title">最佳时节</h3>
+        <p class="culture-text">
+          春季：银杏吐绿，春意盎然<br>
+          秋季：银杏金黄，层林尽染<br>
+          清晨和黄昏光影最美，适合摄影
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">📸</div>
+        <h3 class="culture-title">游览建议</h3>
+        <p class="culture-text">
+          穿汉服或旗袍拍照效果极佳<br>
+          品尝西街特色小吃<br>
+          参观绣川书院感受书香气息<br>
+          漫步护城河边欣赏水乡风光
+        </p>
+      </div>
+      
+      <div class="culture-item slide-up">
+        <div class="culture-icon">💡</div>
+        <h3 class="culture-title">温馨提示</h3>
+        <p class="culture-text">
+          文庙周一闭馆，请提前规划<br>
+          携带饮水和防晒用品<br>
+          尊重当地居民生活<br>
+          保护文物古迹，文明旅游
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <!-- 页脚 -->
+  <footer>
+    <div class="footer-content">
+      <h3 class="footer-title">城厢古镇</h3>
+      <p class="footer-text">
+        千年古城，诗意栖居 · 在这里感受历史的温度与文化的魅力
+      </p>
+      
+      <div class="footer-info">
+        <div class="footer-item">
+          <span>📍</span>
+          <span>成都市青白江区城厢镇</span>
+        </div>
+        <div class="footer-item">
+          <span>🎫</span>
+          <span>免费开放</span>
+        </div>
+        <div class="footer-item">
+          <span>⏰</span>
+          <span>全天开放</span>
+        </div>
+      </div>
+      
+      <div class="footer-divider"></div>
+      
+      <p class="footer-copyright">
+        © 2025 大弯中学—信息技术项目式学习小组<br>
+      </p>
+    </div>
+  </footer>
+  
+  <script type="module">
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offsetTop = target.offsetTop - 80;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 页面加载动画
+    window.addEventListener('load', () => {
+      // 英雄区域动画
+      anime({
+        targets: '.hero .fade-in',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        duration: 1200,
+        delay: anime.stagger(200, {start: 300}),
+        easing: 'easeOutExpo'
+      });
+    });
+    
+    // 滚动触发动画
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          
+          if (element.classList.contains('slide-up')) {
+            anime({
+              targets: element,
+              opacity: [0, 1],
+              translateY: [30, 0],
+              duration: 800,
+              easing: 'easeOutExpo'
+            });
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+    
+    // 观察所有需要动画的元素
+    document.querySelectorAll('.slide-up').forEach(el => {
+      observer.observe(el);
+    });
+    
+    // 卡片悬停效果增强
+    document.querySelectorAll('.attraction-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        anime({
+          targets: this,
+          scale: 1.02,
+          duration: 300,
+          easing: 'easeOutQuad'
+        });
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        anime({
+          targets: this,
+          scale: 1,
+          duration: 300,
+          easing: 'easeOutQuad'
+        });
+      });
+    });
+    
+    // 响应式适配
+    function handleResize() {
+      const width = window.innerWidth;
+      if (width < 768) {
+        document.documentElement.style.fontSize = '14px';
+      } else {
+        document.documentElement.style.fontSize = '16px';
+      }
+    }
+    
+    window.addEventListener('resize', handleResize);
+    handleResize();
+  </script>
+</body>
+</html>
